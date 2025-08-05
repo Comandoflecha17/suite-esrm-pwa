@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Suite ESRM Integral - Análisis y gestión de riesgos en seguridad ejecutiva VIP">
+    <meta name="keywords" content="ESRM, seguridad ejecutiva, análisis de riesgos, protección VIP, seguridad corporativa">
+    <meta name="author" content="Suite ESRM Integral">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="ESRM Suite">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    <meta name="msapplication-config" content="/browserconfig.xml">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/public/manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/icon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/icon-180x180.png">
+    <link rel="mask-icon" href="/assets/icons/safari-pinned-tab.svg" color="#3b82f6">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="/src/app.js" as="script">
+    <link rel="preload" href="/src/styles.css" as="style">
+    
+    <!-- External Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/src/styles.css">
+    
+    <title>Suite ESRM Integral - Análisis de Riesgos en Seguridad Ejecutiva</title>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-container">
+            <div class="loading-logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>Suite ESRM Integral</h1>
+            </div>
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+            </div>
+            <p class="loading-text">Inicializando motor de análisis ESRM...</p>
+            <div class="loading-progress">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PWA Install Banner -->
+    <div id="install-banner" class="install-banner hidden">
+        <div class="install-content">
+            <i class="fas fa-download"></i>
+            <div class="install-text">
+                <h3>Instalar Suite ESRM</h3>
+                <p>Instala la aplicación para acceso rápido y funcionamiento offline</p>
+            </div>
+            <div class="install-actions">
+                <button id="install-button" class="btn-primary">Instalar</button>
+                <button id="dismiss-install" class="btn-secondary">Ahora no</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application Container -->
+    <div id="app" class="app-container hidden">
+        <!-- Navigation Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <button id="menu-toggle" class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="app-logo">
+                        <i class="fas fa-shield-alt"></i>
+                        <span class="logo-text">Suite ESRM</span>
+                    </div>
+                </div>
+                
+                <div class="header-center">
+                    <nav class="main-nav">
+                        <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="#documents" class="nav-link" data-section="documents">
+                            <i class="fas fa-file-pdf"></i>
+                            <span>Análisis de Documentos</span>
+                        </a>
+                        <a href="#vip-profiles" class="nav-link" data-section="vip-profiles">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Perfiles VIP</span>
+                        </a>
+                        <a href="#risk-management" class="nav-link" data-section="risk-management">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Gestión de Riesgos</span>
+                        </a>
+                        <a href="#reports" class="nav-link" data-section="reports">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Informes</span>
+                        </a>
+                    </nav>
+                </div>
+                
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button id="notifications-btn" class="action-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <button id="settings-btn" class="action-btn">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <div class="user-menu">
+                            <button id="user-menu-btn" class="user-menu-btn">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Admin</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="user-dropdown hidden">
+                                <a href="#profile" class="dropdown-item">
+                                    <i class="fas fa-user"></i>
+                                    <span>Mi Perfil</span>
+                                </a>
+                                <a href="#settings" class="dropdown-item">
+                                    <i class="fas fa-cog"></i>
+                                    <span>Configuración</span>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#logout" class="dropdown-item" id="logout-btn">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Cerrar Sesión</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Mobile Navigation -->
+        <nav id="mobile-nav" class="mobile-nav hidden">
+            <div class="mobile-nav-content">
+                <a href="#dashboard" class="mobile-nav-link active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#documents" class="mobile-nav-link" data-section="documents">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Análisis de Documentos</span>
+                </a>
+                <a href="#vip-profiles" class="mobile-nav-link" data-section="vip-profiles">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Perfiles VIP</span>
+                </a>
+                <a href="#risk-management" class="mobile-nav-link" data-section="risk-management">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Gestión de Riesgos</span>
+                </a>
+                <a href="#reports" class="mobile-nav-link" data-section="reports">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Informes</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="section-header">
+                    <h1>Dashboard Ejecutivo</h1>
+                    <p>Resumen general del estado de seguridad y análisis de riesgos</p>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <!-- KPI Cards -->
+                    <div class="kpi-cards">
+                        <div class="kpi-card risk-high">
+                            <div class="kpi-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 id="high-risk-count">0</h3>
+                                <p>Riesgos Altos</p>
+                            </div>
+                        </div>
+                        
+                        <div class="kpi-card documents">
+                            <div class="kpi-icon">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 id="documents-count">0</h3>
+                                <p>Documentos Analizados</p>
+                            </div>
+                        </div>
+                        
+                        <div class="kpi-card vip-profiles">
+                            <div class="kpi-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 id="vip-profiles-count">0</h3>
+                                <p>Perfiles VIP</p>
+                            </div>
+                        </div>
+                        
+                        <div class="kpi-card analysis">
+                            <div class="kpi-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="kpi-content">
+                                <h3 id="analysis-count">0</h3>
+                                <p>Análisis Realizados</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts and Analytics -->
+                    <div class="dashboard-charts">
+                        <div class="chart-container">
+                            <h3>Distribución de Riesgos</h3>
+                            <canvas id="risk-distribution-chart"></canvas>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h3>Análisis por Mes</h3>
+                            <canvas id="monthly-analysis-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="recent-activity">
+                        <h3>Actividad Reciente</h3>
+                        <div id="activity-list" class="activity-list">
+                            <!-- Activity items will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <h3>Acciones Rápidas</h3>
+                        <div class="action-buttons">
+                            <button class="action-btn-large" data-action="upload-document">
+                                <i class="fas fa-upload"></i>
+                                <span>Subir Documento</span>
+                            </button>
+                            <button class="action-btn-large" data-action="new-vip-profile">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Nuevo Perfil VIP</span>
+                            </button>
+                            <button class="action-btn-large" data-action="generate-report">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Generar Informe</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Documents Analysis Section -->
+            <section id="documents-section" class="content-section">
+                <div class="section-header">
+                    <h1>Análisis de Documentos</h1>
+                    <p>Sube y analiza documentos PDF con metodología ESRM</p>
+                </div>
+                
+                <div class="documents-container">
+                    <!-- Upload Area -->
+                    <div class="upload-area" id="upload-area">
+                        <div class="upload-content">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>Arrastra documentos PDF aquí</h3>
+                            <p>o haz clic para seleccionar archivos</p>
+                            <input type="file" id="file-input" accept=".pdf" multiple hidden>
+                            <button class="btn-primary" id="select-files-btn">Seleccionar Archivos</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Processing Status -->
+                    <div id="processing-status" class="processing-status hidden">
+                        <div class="processing-content">
+                            <div class="processing-spinner">
+                                <div class="spinner"></div>
+                            </div>
+                            <h3>Procesando documento...</h3>
+                            <p id="processing-text">Extrayendo texto del PDF...</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="processing-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Analysis Results -->
+                    <div id="analysis-results" class="analysis-results hidden">
+                        <!-- Results will be populated by JavaScript -->
+                    </div>
+                    
+                    <!-- Documents List -->
+                    <div class="documents-list">
+                        <div class="list-header">
+                            <h3>Documentos Analizados</h3>
+                            <div class="list-controls">
+                                <input type="text" id="search-documents" placeholder="Buscar documentos..." class="search-input">
+                                <select id="filter-risk-level" class="filter-select">
+                                    <option value="">Todos los niveles</option>
+                                    <option value="very_high">Muy Alto</option>
+                                    <option value="high">Alto</option>
+                                    <option value="medium">Medio</option>
+                                    <option value="low">Bajo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="documents-table" class="documents-table">
+                            <!-- Documents table will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIP Profiles Section -->
+            <section id="vip-profiles-section" class="content-section">
+                <div class="section-header">
+                    <h1>Perfiles VIP</h1>
+                    <p>Gestión de perfiles de personas de alto valor</p>
+                    <button class="btn-primary" id="new-vip-btn">
+                        <i class="fas fa-plus"></i>
+                        Nuevo Perfil VIP
+                    </button>
+                </div>
+                
+                <div class="vip-profiles-container">
+                    <!-- VIP Profiles Grid -->
+                    <div id="vip-profiles-grid" class="vip-profiles-grid">
+                        <!-- VIP profiles will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Risk Management Section -->
+            <section id="risk-management-section" class="content-section">
+                <div class="section-header">
+                    <h1>Gestión de Riesgos</h1>
+                    <p>Monitoreo y gestión de riesgos identificados</p>
+                </div>
+                
+                <div class="risk-management-container">
+                    <!-- Risk Matrix -->
+                    <div class="risk-matrix">
+                        <h3>Matriz de Riesgos</h3>
+                        <div id="risk-matrix-chart" class="risk-matrix-chart">
+                            <!-- Risk matrix will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Risk List -->
+                    <div class="risk-list">
+                        <h3>Riesgos Identificados</h3>
+                        <div id="risks-table" class="risks-table">
+                            <!-- Risks table will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports-section" class="content-section">
+                <div class="section-header">
+                    <h1>Informes y Reportes</h1>
+                    <p>Generación de informes ejecutivos y reportes de análisis</p>
+                </div>
+                
+                <div class="reports-container">
+                    <!-- Report Templates -->
+                    <div class="report-templates">
+                        <h3>Plantillas de Informes</h3>
+                        <div class="template-grid">
+                            <div class="template-card" data-template="executive">
+                                <i class="fas fa-file-alt"></i>
+                                <h4>Informe Ejecutivo</h4>
+                                <p>Resumen ejecutivo de análisis de riesgos</p>
+                                <button class="btn-primary">Generar</button>
+                            </div>
+                            <div class="template-card" data-template="detailed">
+                                <i class="fas fa-file-pdf"></i>
+                                <h4>Análisis Detallado</h4>
+                                <p>Informe técnico completo</p>
+                                <button class="btn-primary">Generar</button>
+                            </div>
+                            <div class="template-card" data-template="summary">
+                                <i class="fas fa-chart-pie"></i>
+                                <h4>Resumen Estadístico</h4>
+                                <p>Gráficos y estadísticas</p>
+                                <button class="btn-primary">Generar</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Generated Reports -->
+                    <div class="generated-reports">
+                        <h3>Informes Generados</h3>
+                        <div id="reports-list" class="reports-list">
+                            <!-- Reports list will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals and Overlays -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="modal-title">Modal Title</h2>
+                <button class="modal-close" id="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content" id="modal-content">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <!-- Modal footer will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast-container" class="toast-container">
+        <!-- Toast notifications will be populated by JavaScript -->
+    </div>
+
+    <!-- Offline Indicator -->
+    <div id="offline-indicator" class="offline-indicator hidden">
+        <i class="fas fa-wifi"></i>
+        <span>Sin conexión - Funcionando offline</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/src/storage-manager.js"></script>
+    <script src="/src/pdf-processor.js"></script>
+    <script src="/src/esrm-engine.js"></script>
+    <script src="/src/app.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/public/sw.js')
+                    .then(registration => {
+                        console.log('[PWA] Service Worker registrado:', registration);
+                    })
+                    .catch(error => {
+                        console.log('[PWA] Error registrando Service Worker:', error);
+                    });
+            });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('install-banner').classList.remove('hidden');
+        });
+
+        document.getElementById('install-button').addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('[PWA] Usuario aceptó la instalación');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('install-banner').classList.add('hidden');
+                });
+            }
+        });
+
+        document.getElementById('dismiss-install').addEventListener('click', () => {
+            document.getElementById('install-banner').classList.add('hidden');
+        });
+
+        // Online/Offline Status
+        window.addEventListener('online', () => {
+            document.getElementById('offline-indicator').classList.add('hidden');
+        });
+
+        window.addEventListener('offline', () => {
+            document.getElementById('offline-indicator').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
+
